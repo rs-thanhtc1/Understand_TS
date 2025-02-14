@@ -1,7 +1,7 @@
 class Department {
     
     // private name: string;
-    private employees: string[] = [];
+    protected employees: string[] = [];
 
     constructor(private readonly id: string, private DPName: string){
         // this.name = DPName;
