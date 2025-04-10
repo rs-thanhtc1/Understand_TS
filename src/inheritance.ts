@@ -12,10 +12,16 @@
 // }
 
 class ITDepartment extends Department {
+    static yearNow = 2025;
+
     admins : string[];
     constructor (id: string, admins: string[]){
         super(id, 'IT');
         this.admins = admins;
+    }
+
+    describe() {
+        console.log('Department - ID: ' + this.id)
     }
 }
 
@@ -42,6 +48,10 @@ class Accounting extends Department{
         this.lastReport = reports[0];
     }
 
+    describe() {
+        console.log('Department - ID: ' + this.id)
+    }
+
     addEmployee(employee: string): void {
         if( employee == 'Thanh'){
             return;
@@ -61,6 +71,8 @@ class Accounting extends Department{
 }
 
 const it = new ITDepartment('d1', ['Thanh']);
+
+console.log(ITDepartment.yearNow);
 
 const accounting1 =  new Accounting('d2', []);
 

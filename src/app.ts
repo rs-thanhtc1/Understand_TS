@@ -15,4 +15,4 @@ const add = (...numbers: number[]) => {
 };
 
 const addNumbers = add(5, 6, 7, 12);
-console.log(addNumbers);
+console.log('Number: ' + addNumbers);
