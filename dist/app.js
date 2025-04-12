@@ -10,5 +10,5 @@ const add = (...numbers) => {
     });
 };
 const addNumbers = add(5, 6, 7, 12);
-console.log(addNumbers);
+console.log('Number: ' + addNumbers);
 //# sourceMappingURL=app.js.map

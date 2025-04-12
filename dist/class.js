@@ -7,9 +7,6 @@ class Department {
         this.employees = [];
         // this.name = DPName;
     }
-    describe() {
-        console.log(`Department (${this.id}) : ${this.DPName}`);
-    }
     addEmployee(employee) {
         this.employees.push(employee);
     }
@@ -18,10 +15,10 @@ class Department {
         console.log(this.employees);
     }
 }
-const accounting = new Department('D1', 'Accounting');
-accounting.addEmployee('Thanh');
-accounting.addEmployee('Quan');
-// accounting.employees[2] = 'Truong';
-accounting.printEmployeeInformation();
-accounting.describe();
+//  const accounting = new Department('D1','Accounting');
+// accounting.addEmployee('Thanh');
+// accounting.addEmployee('Quan');
+// // accounting.employees[2] = 'Truong';
+// accounting.printEmployeeInformation();
+// accounting.describe();
 //# sourceMappingURL=class.js.map
