@@ -50,8 +50,22 @@ function logger(target, ctx) {
     };
 }
 function autobind(target, ctx) {
+    ctx.addInitializer(function () {
+        this[ctx.name] = this[ctx.name].bind(this);
+    });
+    // Đây là một hàm mới tạo ra để thay thế cho phương thức gốc
+    return function () {
+        console.log('Executing original function');
+        target.apply(this);
+    };
+}
+function fieldLogger(target, ctx) {
     console.log(target);
     console.log(ctx);
+    return (initialValue) => {
+        console.log(initialValue);
+        return initialValue.toUpperCase();
+    };
 }
 let Person = (() => {
     let _classDecorators = [logger];
@@ -59,20 +73,26 @@ let Person = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     let _instanceExtraInitializers = [];
+    let _name_decorators;
+    let _name_initializers = [];
+    let _name_extraInitializers = [];
     let _greet_decorators;
     var Person = _classThis = class {
-        constructor() {
-            this.name = (__runInitializers(this, _instanceExtraInitializers), 'Thanh');
-        }
         greet() {
             console.log('Hi, I am ' + this.name);
+        }
+        constructor() {
+            this.name = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _name_initializers, 'Thanh'));
+            __runInitializers(this, _name_extraInitializers);
         }
     };
     __setFunctionName(_classThis, "Person");
     (() => {
         const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        _name_decorators = [fieldLogger];
         _greet_decorators = [autobind];
         __esDecorate(_classThis, null, _greet_decorators, { kind: "method", name: "greet", static: false, private: false, access: { has: obj => "greet" in obj, get: obj => obj.greet }, metadata: _metadata }, null, _instanceExtraInitializers);
+        __esDecorate(null, null, _name_decorators, { kind: "field", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         Person = _classThis = _classDescriptor.value;
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -81,5 +101,12 @@ let Person = (() => {
     return Person = _classThis;
 })();
 const thanh = new Person();
-const quan = new Person();
+const greet = thanh.greet;
+// Khi gọi greet như một function độc lập, `this` sẽ không tự động là `thanh`  
+// Nếu không bind, sẽ có thể dẫn đến lỗi: `Cannot read property 'name' of undefined` 
+// In ra thông báo: "Executing original function" và "Hi, I am Thanh"
+greet();
+// Tuy nhiên, với decorator autobind, `greet` sẽ giữ được ngữ cảnh  
+// In ra thông báo: "Executing original function" và "Hi, I am Thanh"
+thanh.greet();
 //# sourceMappingURL=decorators.js.map
